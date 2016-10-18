@@ -9,4 +9,4 @@ Have fun playing!
 Click below to play the game!
 
 
-# [Play Here](https://rawgit.com/Brendenvski/Game/code/breakoutGame/)
+# [Play Here](https://rawgit.com/Brendenvski/breakoutGame/master/index.html)

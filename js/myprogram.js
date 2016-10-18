@@ -1,4 +1,3 @@
-
 // Game Created by: Brenden Villeneuve
 
 // Tutorial Credit: https://developer.mozilla.org/en-US/docs/Games/
@@ -30,6 +29,103 @@ var rightPressed = false;
 var leftPressed = false;
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
+
+// All of the vairables used for the bricks and building 
+//    the bricks 
+var brickRowCount = 3;
+var brickColumnCount = 5;
+var brickWidth = 75;
+var brickHeight = 20;
+var brickPadding = 10;
+var brickOffsetTop = 30;
+var brickOffsetLeft = 30;
+var bricks = [];
+for(c=0; c<brickColumnCount; c++) 
+{
+    bricks[c] = [];
+    for(r = 0; r < brickRowCount; r++)
+     {
+        bricks[c][r] = { x: 0, y: 0 , status: 1};
+    }
+}
+
+// SCORE
+var score = 0;
+var winningScore = 300 * brickRowCount * brickColumnCount;
+
+function drawScore()
+{
+	ctx.font = "20px Algerian";
+	ctx.fillStyle = "#FF00FF";
+	ctx.fillText("Score: " + score, 8 , 20);
+}
+
+// WE must draw the bricks onto the screen now: this is 
+//    the function that will draw all of the bricks onto
+//    the screen.
+function drawBricks()
+ {
+    for(c = 0; c < brickColumnCount; c++) 
+    {
+        for(r = 0; r < brickRowCount; r++) 
+        {
+        	if (bricks[c][r].status == 1)
+        	{
+        		var brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+        		var brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+            	bricks[c][r].x = brickX;
+            	bricks[c][r].y = brickY;
+            	ctx.beginPath();
+            	ctx.rect(brickX, brickY, brickWidth, brickHeight);
+            	ctx.fillStyle = "#0095DD";
+            	ctx.fill();
+            	ctx.closePath();	
+        	}
+        	else if(bricks[c][r].status < 10){
+        		var brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+        		var brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+            	bricks[c][r].x = brickX;
+            	bricks[c][r].y = brickY;
+            	ctx.beginPath();
+            	ctx.rect(brickX, brickY, brickWidth, brickHeight);
+            	ctx.fillStyle = "#FF0000";
+            	ctx.fill();
+            	ctx.closePath();
+            	bricks[c][r].status += 1;
+        	}
+        }
+    }
+}
+
+// Collision detection goes on here: 
+function detection() 
+{
+	for(c = 0; c < brickColumnCount; c++) 
+    {
+        for(r = 0; r < brickRowCount; r++) 
+        {
+        	var brik = bricks[c][r];
+        	if (brik.status == 1)
+        	{
+        		if(x > brik.x && 
+        			x < brik.x + brickWidth + ballRadius &&
+					y > brik.y &&
+					y < brik.y + brickHeight + ballRadius){
+        			dy = -dy;
+        			brik.status = 2;
+        			score+=300;
+        			if(score == winningScore)
+        			{
+        				alert("u won");
+        				document.location.reload();
+        			}
+        		}
+        	}
+
+        }
+    }
+}
 
 function keyDownHandler(e) 
 {
@@ -76,16 +172,31 @@ function drawBall()
 function draw() 
 {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawBricks();
 	drawBall();
 	drawPaddle();
+	detection();
+	drawScore();
 
 	if ((x > (canvas.width - ballRadius)) || (x < 10))
 	{
 		dx *= -1;
 	}
-	if ((y > (canvas.height - ballRadius)) || (y < 10))
+	if (y < 10)
 	{
 		dy *= -1;
+	}
+	else if (y + dy> canvas.height - ballRadius)
+	{
+		if(x > paddleX && x < paddleX + paddleWidth)
+		{
+			dy *= -1;
+		}
+		else 
+		{
+			alert("GAME OVER");
+			document.location.reload();
+		}
 	}
 
 	if(rightPressed && (paddleX < (canvas.width-paddleWidth)))

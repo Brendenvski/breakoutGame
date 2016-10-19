@@ -15,8 +15,13 @@ var ctx = canvas.getContext("2d");
 var x = canvas.width/2;
 var y = canvas.height-30;
 var ballRadius = 10;
-var dx = 2;
+var ballSpeed = 4;
 var dy = -2;
+var dx = (Math.random() * 6) - 3;
+while(dx == 0)
+{
+	dx = (Math.random() * 6) - 3;
+}
 
 // These are all of the variable that are linked with
 //    the paddle.
@@ -108,10 +113,36 @@ function detection()
         	var brik = bricks[c][r];
         	if (brik.status == 1)
         	{
-        		if(x > brik.x && 
-        			x < brik.x + brickWidth + ballRadius &&
-					y > brik.y &&
-					y < brik.y + brickHeight + ballRadius){
+        		if(x == brik.x + brickWidth - ballRadius &&
+						y > brik.y &&
+						y < brik.y + brickHeight)
+        		{
+        			dx = -dx;
+        			brik.status = 2;
+        			score+=300;
+        			if(score == winningScore)
+        			{
+        				alert("u won");
+        				document.location.reload();
+        			}
+        		}
+        		else if(x == brik.x + ballRadius &&
+						y > brik.y &&
+						y < brik.y + brickHeight)
+        		{
+        			dx = -dx;
+        			brik.status = 2;
+        			score+=300;
+        			if(score == winningScore)
+        			{
+        				alert("u won");
+        				document.location.reload();
+        			}
+        		}
+        		else if(x >= brik.x && 
+        			x <= brik.x + brickWidth + ballRadius &&
+					y <= brik.y + brickHeight + ballRadius)
+        		{
         			dy = -dy;
         			brik.status = 2;
         			score+=300;
@@ -121,6 +152,7 @@ function detection()
         				document.location.reload();
         			}
         		}
+
         	}
 
         }
@@ -201,10 +233,10 @@ function draw()
 
 	if(rightPressed && (paddleX < (canvas.width-paddleWidth)))
 	{
-		paddleX += 2;
+		paddleX += 5;
 	}
 	else if (leftPressed && paddleX > 0) {
-		paddleX -= 2;
+		paddleX -= 5;
 	}
 
 	x += dx;

@@ -16,7 +16,7 @@ var x = canvas.width/2;
 var y = canvas.height-30;
 var ballRadius = 10;
 var ballSpeed = 4;
-var dy = -2;
+var dy = -3;
 var dx = (Math.random() * 6) - 3;
 while(dx == 0)
 {
@@ -59,10 +59,13 @@ for(c=0; c<brickColumnCount; c++)
 var score = 0;
 var winningScore = 300 * brickRowCount * brickColumnCount;
 
+var randomizer = 0;
+var ballColour = "#0095DD";
+
 function drawScore()
 {
 	ctx.font = "20px Algerian";
-	ctx.fillStyle = "#FF00FF";
+	ctx.fillStyle = "#0000FF";
 	ctx.fillText("Score: " + score, 8 , 20);
 }
 
@@ -120,6 +123,7 @@ function detection()
         			dx = -dx;
         			brik.status = 2;
         			score+=300;
+        			randomizer = 1;
         			if(score == winningScore)
         			{
         				alert("u won");
@@ -133,6 +137,7 @@ function detection()
         			dx = -dx;
         			brik.status = 2;
         			score+=300;
+        			randomizer = 1;
         			if(score == winningScore)
         			{
         				alert("u won");
@@ -146,6 +151,7 @@ function detection()
         			dy = -dy;
         			brik.status = 2;
         			score+=300;
+        			randomizer = 1;
         			if(score == winningScore)
         			{
         				alert("u won");
@@ -196,8 +202,18 @@ function drawBall()
 {
 	ctx.beginPath();
 	ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-	ctx.fillStyle = "#0095DD";
-	ctx.fill();
+	if (randomizer == 1)
+	{
+		var newColour = Math.random() * 100000;
+		ballColour = newColour;
+		ctx.fillStyle = "#" + newColour;
+		ctx.fill();
+	}
+	else 
+	{
+		ctx.fillStyle = ballColour;
+		ctx.fill();
+	}
 	ctx.closePath();
 }
 
@@ -218,7 +234,7 @@ function draw()
 	{
 		dy *= -1;
 	}
-	else if (y + dy> canvas.height - ballRadius - paddleHeight)
+	else if (y > canvas.height - ballRadius - paddleHeight)
 	{
 		if(x > paddleX && x < paddleX + paddleWidth)
 		{

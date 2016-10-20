@@ -2,7 +2,10 @@
 
 # Objective
 * Break all of the bricks above you without dropping the ball. 
-* Works excatly like classic brickbreaker.
+* Powerups Occur from random blocks every game
+
+# How to Play
+>Below there is a link on where the game can be played.
 
 Have fun playing! 
 

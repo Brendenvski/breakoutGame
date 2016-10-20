@@ -7,6 +7,7 @@
 # How to Play
 * Use the arrow keys to move back and forth
 * Make sure you get under the ball before it goes by you or you lose
+
 >Below there is a link on where the game can be played.
 
 Have fun playing! 
